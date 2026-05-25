@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { useAuth } from '../../context/AuthContext';
 import { Lock, User, LogIn } from 'lucide-react';
 
@@ -96,6 +96,21 @@ export default function AdminLogin() {
             {loading ? 'Signing in…' : 'Sign In'}
           </button>
         </form>
+
+        <p style={{
+          textAlign: 'center',
+          marginTop: '1.25rem',
+          fontSize: '0.82rem',
+          color: 'var(--text-muted)',
+        }}>
+          Need access?{' '}
+          <Link
+            to="/contact#admin-request"
+            style={{ color: 'var(--accent)' }}
+          >
+            Request here →
+          </Link>
+        </p>
       </div>
     </div>
   );

@@ -34,6 +34,9 @@ export default function Navbar() {
             <BookOpen size={14} style={{ display: 'inline', marginRight: 4 }} />
             Courses
           </NavLink>
+          <NavLink to="/contact" className={linkClass}>
+            Contact
+          </NavLink>
 
           {admin ? (
             <>
@@ -72,6 +75,7 @@ export default function Navbar() {
       <div className={`mobile-menu${menuOpen ? ' open' : ''}`}>
         <NavLink to="/" className={linkClass} end onClick={() => setMenuOpen(false)}>Home</NavLink>
         <NavLink to="/courses" className={linkClass} onClick={() => setMenuOpen(false)}>Courses</NavLink>
+        <NavLink to="/contact" className={linkClass} onClick={() => setMenuOpen(false)}>Contact</NavLink>
         {admin ? (
           <button className="nav-link" style={{ border: 'none', textAlign: 'left', color: 'var(--danger)' }} onClick={handleLogout}>
             Logout

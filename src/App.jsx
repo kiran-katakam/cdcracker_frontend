@@ -13,6 +13,7 @@ import AdminLayout from './pages/admin/AdminLayout';
 import AdminDashboard from './pages/admin/AdminDashboard';
 import PrivacyPage from './pages/PrivacyPage';
 import TermsPage from './pages/TermsPage';
+import ContactPage from './pages/ContactPage';
 import NotFoundPage from './pages/NotFoundPage';
 
 export default function App() {
@@ -32,6 +33,7 @@ export default function App() {
               {/* Legal */}
               <Route path="/privacy" element={<PrivacyPage />} />
               <Route path="/terms" element={<TermsPage />} />
+              <Route path="/contact" element={<ContactPage />} />
 
               {/* Admin */}
               <Route path="/admin/login" element={<AdminLogin />} />

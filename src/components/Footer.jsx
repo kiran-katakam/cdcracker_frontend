@@ -19,6 +19,7 @@ export default function Footer() {
           <div className="footer-col-title">Navigate</div>
           <Link to="/" className="footer-link">Home</Link>
           <Link to="/courses" className="footer-link">Browse Courses</Link>
+          <Link to="/contact" className="footer-link">Contact &amp; Support</Link>
           <Link to="/admin/login" className="footer-link">Admin Login</Link>
         </div>
 
@@ -27,6 +28,7 @@ export default function Footer() {
           <div className="footer-col-title">Legal</div>
           <Link to="/privacy" className="footer-link">Privacy Policy</Link>
           <Link to="/terms" className="footer-link">Terms &amp; Disclaimer</Link>
+          <Link to="/contact#admin-request" className="footer-link">Request Admin Access</Link>
         </div>
       </div>
 
