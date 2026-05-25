@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { Link, useParams } from 'react-router-dom';
 import { Search, Code2, HelpCircle, Copy, CheckCircle, Plus, Pencil, Trash2 } from 'lucide-react';
 import API from '../api/axios';
@@ -100,6 +100,21 @@ export default function AssessmentPage() {
   const [coding, setCoding] = useState([]);
   const [mcq, setMcq] = useState([]);
   const [tab, setTab] = useState('coding');
+
+  // Intercept Ctrl+F / Cmd+F → focus MCQ search instead of browser find
+  const mcqSearchRef = useRef(null);
+  useEffect(() => {
+    const handler = (e) => {
+      if ((e.ctrlKey || e.metaKey) && e.key === 'f') {
+        e.preventDefault();
+        setTab('mcq');
+        // Defer focus until after React re-renders the MCQ tab
+        setTimeout(() => mcqSearchRef.current?.focus(), 0);
+      }
+    };
+    window.addEventListener('keydown', handler);
+    return () => window.removeEventListener('keydown', handler);
+  }, []);
   const [mcqSearch, setMcqSearch] = useState('');
   const [langFilter, setLangFilter] = useState('all');
   const [loading, setLoading] = useState(true);
@@ -316,8 +331,9 @@ export default function AssessmentPage() {
               <Search size={16} className="search-icon" />
               <input
                 id="mcq-search"
+                ref={mcqSearchRef}
                 type="text"
-                placeholder="Search questions or answers…"
+                placeholder="Search questions or answers… (Ctrl+F)"
                 value={mcqSearch}
                 onChange={(e) => setMcqSearch(e.target.value)}
               />

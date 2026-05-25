@@ -30,11 +30,11 @@ const FEATURES = [
   },
 ];
 
-const VIDEOS = [
-  { title: 'Getting Started', subtitle: 'Browse courses & find answers', duration: '2 min' },
-  { title: 'Importing MCQ Data', subtitle: 'Paste JSON, get answers instantly', duration: '3 min' },
-  { title: 'Admin Setup', subtitle: 'Create courses and upload content', duration: '4 min' },
-];
+// const VIDEOS = [
+//   { title: 'Getting Started', subtitle: 'Browse courses & find answers', duration: '2 min' },
+//   { title: 'Importing MCQ Data', subtitle: 'Paste JSON, get answers instantly', duration: '3 min' },
+//   { title: 'Admin Setup', subtitle: 'Create courses and upload content', duration: '4 min' },
+// ];
 
 export default function LandingPage() {
   const [courseCount, setCourseCount] = useState('—');
@@ -54,7 +54,7 @@ export default function LandingPage() {
             </div>
             <h1 className="landing-h1">
               The smarter way<br />
-              to <span className="gradient-text">study faster</span>
+              to <span className="gradient-text">SOLVE FASTER</span>
             </h1>
             <p className="landing-sub">
               CDCracker gives you instant access to coding solutions and MCQ answers from
@@ -80,10 +80,10 @@ export default function LandingPage() {
             </div>
             <div className="mockup-body">
               {[
-                { label: 'Data Structures', type: 'Mixed', color: '#4ade80' },
-                { label: 'Aptitude', type: 'MCQ', color: '#c084fc' },
-                { label: 'Full Stack Dev', type: 'Coding', color: '#7eb3ff' },
-                { label: 'DBMS', type: 'Mixed', color: '#4ade80' },
+                { label: 'Daily Technical Assesment', type: 'Coding', color: '#4ade80' },
+                { label: 'Daily Aptitude Assesment', type: 'MCQ', color: '#c084fc' },
+                { label: 'Python', type: 'Coding', color: '#7eb3ff' },
+                { label: 'Company Specific', type: 'Mixed', color: '#4ade80' },
               ].map((c) => (
                 <div className="mockup-row" key={c.label}>
                   <BookOpen size={14} color="var(--text-muted)" />
@@ -182,7 +182,7 @@ export default function LandingPage() {
         </div>
       </section>
 
-      {/* ── Video Tutorials ── */}
+      {/* ── Video Tutorials ──
       <section className="video-section">
         <div style={{ maxWidth: 1200, margin: '0 auto' }}>
           <div className="section-eyebrow">Tutorials</div>
@@ -204,7 +204,7 @@ export default function LandingPage() {
             ))}
           </div>
         </div>
-      </section>
+      </section> */}
 
       {/* ── Footer CTA ── */}
       <section className="landing-cta-section">
