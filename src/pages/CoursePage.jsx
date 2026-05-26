@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { Link, useParams, useNavigate } from 'react-router-dom';
+import { Link, useParams } from 'react-router-dom';
 import { Calendar, ClipboardList, Tag, Plus, Pencil, Trash2 } from 'lucide-react';
 import API from '../api/axios';
 import { useAuth } from '../context/AuthContext';
@@ -47,7 +47,6 @@ function AssessmentForm({ value, onChange }) {
 export default function CoursePage() {
   const { courseId } = useParams();
   const { admin } = useAuth();
-  const navigate = useNavigate();
   const [course, setCourse] = useState(null);
   const [assessments, setAssessments] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -79,15 +78,14 @@ export default function CoursePage() {
   const submit = async () => {
     try {
       if (modal === 'create') {
-        const { data } = await API.post(`/courses/${courseId}/assessments`, form);
-        setModal(null);
-        navigate(`/courses/${courseId}/assessments/${data._id}`);
+        await API.post(`/courses/${courseId}/assessments`, form);
+        setToast({ message: 'Assessment created!', type: 'success' });
       } else {
         await API.put(`/courses/${courseId}/assessments/${editing._id}`, form);
         setToast({ message: 'Assessment updated!', type: 'success' });
-        setModal(null);
-        load();
       }
+      setModal(null);
+      load();
     } catch (e) {
       setToast({ message: e.response?.data?.message || 'Error', type: 'error' });
     }
