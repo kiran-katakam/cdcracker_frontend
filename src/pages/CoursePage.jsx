@@ -66,7 +66,15 @@ export default function CoursePage() {
   };
   useEffect(load, [courseId]);
 
-  const openCreate = (e) => { e.preventDefault(); setForm(EMPTY); setModal('create'); };
+  const openCreate = (e) => {
+    e.preventDefault();
+    setForm({
+      ...EMPTY,
+      startDate: course?.startDate?.slice(0, 10) || '',
+      endDate: course?.endDate?.slice(0, 10) || '',
+    });
+    setModal('create');
+  };
   const openEdit = (e, a) => {
     e.preventDefault();
     setEditing(a);
