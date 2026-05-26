@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Upload, AlertCircle, CheckCircle, Trash2, ArrowRight, FileJson } from 'lucide-react';
+import { Upload, AlertCircle, CheckCircle, Trash2, ArrowRight, FileJson, Pencil } from 'lucide-react';
 import Modal from './Modal';
 import API from '../api/axios';
 import Toast from './Toast';
@@ -59,6 +59,10 @@ export default function McqBulkImport({ courseId, assessmentId, onImported }) {
   const [parseError, setParseError] = useState('');
   const [submitting, setSubmitting] = useState(false);
   const [toast, setToast] = useState(null);
+  const [editingKey, setEditingKey] = useState(null); // _key of card being edited
+
+  const updateQuestion = (key, field, value) =>
+    setQuestions((qs) => qs.map((q) => q._key === key ? { ...q, [field]: value } : q));
 
   const reset = () => { setStep(1); setRaw(''); setQuestions([]); setParseErrors([]); setParseError(''); };
   const close = () => { reset(); setOpen(false); };
@@ -193,7 +197,7 @@ export default function McqBulkImport({ courseId, assessmentId, onImported }) {
               )}
 
               <p style={{ fontSize: '0.82rem', color: 'var(--text-secondary)' }}>
-                Review the extracted Q&amp;A pairs. Remove any you don't want before importing.
+                Review and edit the extracted Q&amp;A pairs. Click <Pencil size={11} style={{ display: 'inline', verticalAlign: 'middle' }} /> to edit any question or answer inline.
               </p>
 
               {/* Question list */}
@@ -205,37 +209,84 @@ export default function McqBulkImport({ courseId, assessmentId, onImported }) {
                 gap: '0.6rem',
                 paddingRight: '0.25rem',
               }}>
-                {questions.map((q, i) => (
-                  <div
-                    key={q._key}
-                    style={{
-                      border: '1px solid var(--border)',
-                      borderRadius: 8,
-                      padding: '0.75rem 1rem',
-                      display: 'flex',
-                      gap: '0.75rem',
-                      alignItems: 'flex-start',
-                    }}
-                  >
-                    <span style={{ fontFamily: 'var(--font-mono)', fontSize: '0.72rem', color: 'var(--text-muted)', flexShrink: 0, paddingTop: 2 }}>
-                      Q{i + 1}
-                    </span>
-                    <div style={{ flex: 1, minWidth: 0 }}>
-                      <div style={{ fontSize: '0.85rem', fontWeight: 500, marginBottom: '0.3rem' }}>{q.question}</div>
-                      <div style={{ fontSize: '0.8rem', color: 'var(--success)', display: 'flex', alignItems: 'center', gap: '0.3rem' }}>
-                        <CheckCircle size={12} /> {q.answer}
+                {questions.map((q, i) => {
+                  const isEditing = editingKey === q._key;
+                  return (
+                    <div
+                      key={q._key}
+                      style={{
+                        border: `1px solid ${isEditing ? 'var(--accent)' : 'var(--border)'}`,
+                        borderRadius: 8,
+                        padding: '0.75rem 1rem',
+                        display: 'flex',
+                        gap: '0.75rem',
+                        alignItems: 'flex-start',
+                        transition: 'border-color 0.2s',
+                      }}
+                    >
+                      <span style={{ fontFamily: 'var(--font-mono)', fontSize: '0.72rem', color: 'var(--text-muted)', flexShrink: 0, paddingTop: 4 }}>
+                        Q{i + 1}
+                      </span>
+
+                      <div style={{ flex: 1, minWidth: 0, display: 'flex', flexDirection: 'column', gap: '0.4rem' }}>
+                        {isEditing ? (
+                          <>
+                            <textarea
+                              value={q.question}
+                              onChange={(e) => updateQuestion(q._key, 'question', e.target.value)}
+                              style={{ fontSize: '0.82rem', minHeight: 60, resize: 'vertical' }}
+                              autoFocus
+                            />
+                            <input
+                              value={q.answer}
+                              onChange={(e) => updateQuestion(q._key, 'answer', e.target.value)}
+                              style={{ fontSize: '0.82rem' }}
+                              placeholder="Correct answer"
+                            />
+                          </>
+                        ) : (
+                          <>
+                            <div style={{ fontSize: '0.85rem', fontWeight: 500 }}>{q.question}</div>
+                            <div style={{ fontSize: '0.8rem', color: 'var(--success)', display: 'flex', alignItems: 'center', gap: '0.3rem' }}>
+                              <CheckCircle size={12} /> {q.answer}
+                            </div>
+                          </>
+                        )}
+                      </div>
+
+                      {/* Action buttons */}
+                      <div style={{ display: 'flex', flexDirection: 'column', gap: '0.3rem', flexShrink: 0 }}>
+                        {isEditing ? (
+                          <button
+                            className="btn btn-success btn-sm"
+                            style={{ padding: '0.2rem 0.5rem' }}
+                            onClick={() => setEditingKey(null)}
+                            title="Save"
+                          >
+                            <CheckCircle size={12} />
+                          </button>
+                        ) : (
+                          <button
+                            className="btn btn-ghost btn-sm"
+                            style={{ padding: '0.2rem 0.5rem' }}
+                            onClick={() => setEditingKey(q._key)}
+                            title="Edit"
+                          >
+                            <Pencil size={12} />
+                          </button>
+                        )}
+                        <button
+                          className="btn btn-danger btn-sm"
+                          style={{ padding: '0.2rem 0.5rem' }}
+                          onClick={() => { if (editingKey === q._key) setEditingKey(null); removeQuestion(q._key); }}
+                          title="Remove"
+                        >
+                          <Trash2 size={12} />
+                        </button>
                       </div>
                     </div>
-                    <button
-                      className="btn btn-danger btn-sm"
-                      style={{ flexShrink: 0, padding: '0.2rem 0.4rem' }}
-                      onClick={() => removeQuestion(q._key)}
-                      title="Remove"
-                    >
-                      <Trash2 size={12} />
-                    </button>
-                  </div>
-                ))}
+                  );
+                })}
 
                 {questions.length === 0 && (
                   <div className="empty-state" style={{ padding: '2rem' }}>
